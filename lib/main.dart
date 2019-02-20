@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'pages/home_page.dart';
+import 'pages/main_page.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -9,9 +9,9 @@ class MyApp extends StatelessWidget {
     return Container(
       child:MaterialApp(
         theme: ThemeData(
-          primarySwatch: Colors.orange,
+          primarySwatch: Colors.pink,
         ),
-        home: HomePage(),
+        home: MainPage(),
       ),
     );
   }
@@ -37,6 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
       appBar: AppBar(
         title: Text(widget.title),
       ),
