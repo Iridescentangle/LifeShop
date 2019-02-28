@@ -4,6 +4,7 @@ import 'home_page.dart';
 import 'category_page.dart';
 import 'cart_page.dart';
 import 'member_page.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class MainPage extends StatefulWidget {
   _MainPageState createState() => _MainPageState();
 }
@@ -40,6 +41,7 @@ class _MainPageState extends State<MainPage> {
   }
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.instance = ScreenUtil(width: 750,height: 1334)..init(context);
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         items: bottomTabs,
