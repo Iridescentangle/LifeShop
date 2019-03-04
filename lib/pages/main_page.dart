@@ -53,7 +53,10 @@ class _MainPageState extends State<MainPage> {
           });
         }
       ),
-      body: pages[currentIndex],
+      body: IndexedStack(
+        index: currentIndex,
+        children: pages,
+      ),
     );
   }
 }
