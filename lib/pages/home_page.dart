@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
       body: FutureBuilder(
         future: getHomePageContent(),
         builder: (context,snapshot){
-          print(snapshot.data.toString());
+          // print(snapshot.data.toString());
           if(snapshot.hasData){
             var data = json.decode(snapshot.data);
             List<Map> swiperData = (data['data']['slides'] as List).cast();
@@ -34,6 +34,8 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
             String leaderImg = data['data']['shopInfo']['leaderImage'];
             String leaderPhone = data['data']['shopInfo']['leaderPhone'];
             List recommendList = data['data']['recommend'];
+            String floorTitle = data['data']['floor1Pic']['PICTURE_ADDRESS'];
+            List floor1 = (data['data']['floor1'] as List).cast();
             return SingleChildScrollView(
               child:Column(
                 children: <Widget>[
@@ -42,6 +44,8 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
                   ADBanner(adPicture: adPicture,),
                   LeaderPhone(picUrl: leaderImg,phone: leaderPhone,),
                   Recommend(recommendList: recommendList,),
+                  FloorTitle(pic_url: floorTitle,),
+                  FloorContent(floorGoodsList: floor1,),
                 ],
               ),
             );
@@ -214,6 +218,69 @@ class Recommend extends StatelessWidget {
               ),
           ],
         ),
+      ),
+    );
+  }
+}
+class FloorTitle extends StatelessWidget {
+  final String pic_url;
+
+  FloorTitle({Key key, this.pic_url}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(10.0),
+      child: Image.network(pic_url),
+    );
+  }
+}
+//楼层商品列表
+class FloorContent extends StatelessWidget {
+  final List floorGoodsList;
+
+  FloorContent({Key key, this.floorGoodsList}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          _firstRow(),
+          _otherGoods(),
+        ],
+      ),
+    );
+  }
+  Widget _firstRow(){
+    return Row(
+      children: <Widget>[
+        _goodsItem(floorGoodsList[0]),
+        Column(
+          children: <Widget>[
+            _goodsItem(floorGoodsList[1]),
+            _goodsItem(floorGoodsList[2]),
+          ],
+        ),
+      ],
+    );
+  }
+  Widget _otherGoods(){
+    return Row(
+      children: <Widget>[
+         _goodsItem(floorGoodsList[3]),
+         _goodsItem(floorGoodsList[4]),
+      ],
+    );
+  }
+  Widget _goodsItem(Map goods){
+    return Container(
+      width: ScreenUtil.instance.setWidth(375),
+      child: InkWell(
+        onTap: (){
+
+        },
+        child: Image.network(goods['image']),
       ),
     );
   }

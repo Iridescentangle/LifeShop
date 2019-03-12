@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
     return Container(
       child:MaterialApp(
         theme: ThemeData(
-          primarySwatch: Colors.pink,
+          primarySwatch: Colors.blue,
         ),
         home: MainPage(),
       ),
