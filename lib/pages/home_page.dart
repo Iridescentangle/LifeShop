@@ -16,14 +16,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
   var homePageContent = '';
   int page = 0;
   List hotGoodsList = [];
+  GlobalKey<RefreshFooterState> key = GlobalKey<RefreshFooterState>();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getHotGoods();
   }
@@ -45,6 +44,17 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
             String floorTitle = data['data']['floor1Pic']['PICTURE_ADDRESS'];
             List floor1 = (data['data']['floor1'] as List).cast();
             return EasyRefresh(
+              refreshFooter: ClassicsFooter(
+                key: key,
+                bgColor: Colors.white,
+                textColor: Colors.lightBlue,
+                moreInfoColor: Colors.lightBlue,
+                showMore: true,
+                noMoreText: '...',
+                moreInfo: '加载中...',
+                loadedText: '上拉加载',
+                loadReadyText:'上拉加载....',
+              ),
               onRefresh: () async{
                 page = 0;
                 _getHotGoods();
@@ -183,6 +193,7 @@ class GridNavigator extends StatelessWidget {
       height: ScreenUtil().setHeight(320),
       padding: EdgeInsets.all(3.0),
       child:GridView.count(
+          physics: NeverScrollableScrollPhysics(),
             crossAxisCount: 5,
             padding: EdgeInsets.all(5.0),
             children: navigatorList.map((item)=>_gridViewItem(context, item)).toList(),
