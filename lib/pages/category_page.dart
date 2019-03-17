@@ -68,7 +68,6 @@ class _LeftCategoryNavigatorState extends State<LeftCategoryNavigator> {
     await request('category').then((result){
       var data = json.decode(result.toString());
       CategoryModel model =CategoryModel.fromJson(data);
-      model.data.forEach((item)=>print(item.mallCategoryName));
       setState(() {
         list = model.data;
       });
@@ -80,15 +79,15 @@ class _LeftCategoryNavigatorState extends State<LeftCategoryNavigator> {
 
       },
       child: Container(
+        alignment: Alignment.center,
         height: ScreenUtil.instance.setHeight(100),
-        padding: EdgeInsets.only(left: 10.0,top: 20.0,),
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border(
             bottom:BorderSide(width: 1,color: Colors.black12),
           ),
         ),
-        child: Text(list[index].mallCategoryName,style: TextStyle(fontSize: 26),),
+        child: Text(list[index].mallCategoryName,),
       ),
     );
   }
