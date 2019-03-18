@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import '../service/service_method.dart';
 import '../config/service_url.dart';
 import 'dart:convert';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../model/category.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 class CategoryPage extends StatefulWidget {
@@ -24,6 +25,12 @@ class _CategoryPageState extends State<CategoryPage> {
         child: Row(
           children: <Widget>[
             LeftCategoryNavigator(),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                RightCategoryNavigator(),
+              ],
+            ),
           ],
         ),
       ),
@@ -88,6 +95,43 @@ class _LeftCategoryNavigatorState extends State<LeftCategoryNavigator> {
           ),
         ),
         child: Text(list[index].mallCategoryName,),
+      ),
+    );
+  }
+}
+class RightCategoryNavigator extends StatefulWidget {
+  @override
+  _RightCategoryNavigatorState createState() => _RightCategoryNavigatorState();
+}
+
+class _RightCategoryNavigatorState extends State<RightCategoryNavigator> {
+  List list = ['全部','名酒','宝丰','北京二锅头','大明'];
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(color: Colors.white,border: Border(
+        bottom: BorderSide(width: 1.0,color: Colors.grey.shade300)
+      )),
+      alignment: Alignment.center,
+      height: ScreenUtil.instance.setHeight(80),
+      width: ScreenUtil.instance.setWidth(570),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: list.length,
+        itemBuilder: (context,index){
+          return _rightInkWell(list[index]);
+        },
+      ),
+    );
+  }
+  Widget _rightInkWell(String itemText){
+    return InkWell(
+      onTap: (){
+
+      },
+      child: Container(
+        padding: EdgeInsets.all(10.0),
+        child: Text(itemText,style:TextStyle(color:Colors.black87,fontSize:ScreenUtil.instance.setSp(25)),),
       ),
     );
   }

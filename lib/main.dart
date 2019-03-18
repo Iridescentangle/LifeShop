@@ -9,6 +9,7 @@ void main(){
   runApp(
     ProviderNode(
       child: MyApp(),
+      providers: providers,
     ),
   );
 }
