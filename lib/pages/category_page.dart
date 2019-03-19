@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../service/service_method.dart';
-import '../config/service_url.dart';
 import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../model/category.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../provide/child_category.dart';
+import 'package:provide/provide.dart';
+import '../provide/child_category.dart';
 class CategoryPage extends StatefulWidget {
   _CategoryPageState createState() => _CategoryPageState();
 }
@@ -83,7 +85,8 @@ class _LeftCategoryNavigatorState extends State<LeftCategoryNavigator> {
   Widget _leftInkWell(int index) {
     return InkWell(
       onTap: (){
-
+        var childList = list[index].bxMallSubDto;
+        Provide.value<ChildCategory>(context).setChildCategory(childList);
       },
       child: Container(
         alignment: Alignment.center,
@@ -119,19 +122,20 @@ class _RightCategoryNavigatorState extends State<RightCategoryNavigator> {
         scrollDirection: Axis.horizontal,
         itemCount: list.length,
         itemBuilder: (context,index){
-          return _rightInkWell(list[index]);
+          return _rightInkWell(index);
         },
       ),
     );
   }
-  Widget _rightInkWell(String itemText){
+  Widget _rightInkWell(int index){
     return InkWell(
       onTap: (){
-
+       
+        
       },
       child: Container(
         padding: EdgeInsets.all(10.0),
-        child: Text(itemText,style:TextStyle(color:Colors.black87,fontSize:ScreenUtil.instance.setSp(25)),),
+        child: Text(list[index],style:TextStyle(color:Colors.black87,fontSize:ScreenUtil.instance.setSp(25)),),
       ),
     );
   }
