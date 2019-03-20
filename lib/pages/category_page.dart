@@ -46,6 +46,7 @@ class LeftCategoryNavigator extends StatefulWidget {
 }
 
 class _LeftCategoryNavigatorState extends State<LeftCategoryNavigator> {
+  var leftIndex = 0;
    List list = [];
    @override
   void initState() {
@@ -83,8 +84,13 @@ class _LeftCategoryNavigatorState extends State<LeftCategoryNavigator> {
     });
   }
   Widget _leftInkWell(int index) {
+    bool isChecked = false;
+    isChecked = (index ==leftIndex);
     return InkWell(
       onTap: (){
+        setState(() {
+         leftIndex =index; 
+        });
         var childList = list[index].bxMallSubDto;
         Provide.value<ChildCategory>(context).setChildCategory(childList);
       },
@@ -92,7 +98,7 @@ class _LeftCategoryNavigatorState extends State<LeftCategoryNavigator> {
         alignment: Alignment.center,
         height: ScreenUtil.instance.setHeight(100),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: isChecked?Colors.grey.shade100:Colors.white,
           border: Border(
             bottom:BorderSide(width: 1,color: Colors.black12),
           ),
@@ -111,23 +117,27 @@ class _RightCategoryNavigatorState extends State<RightCategoryNavigator> {
   List list = ['全部','名酒','宝丰','北京二锅头','大明'];
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(color: Colors.white,border: Border(
-        bottom: BorderSide(width: 1.0,color: Colors.grey.shade300)
-      )),
-      alignment: Alignment.center,
-      height: ScreenUtil.instance.setHeight(80),
-      width: ScreenUtil.instance.setWidth(570),
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: list.length,
-        itemBuilder: (context,index){
-          return _rightInkWell(index);
-        },
-      ),
+    return Provide<ChildCategory>(
+      builder: (context,child,childCategory){
+         return  Container(
+            decoration: BoxDecoration(color: Colors.white,border: Border(
+              bottom: BorderSide(width: 1.0,color: Colors.grey.shade300)
+            )),
+            alignment: Alignment.center,
+            height: ScreenUtil.instance.setHeight(80),
+            width: ScreenUtil.instance.setWidth(570),
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: childCategory.childCategoryList.length,
+              itemBuilder: (context,index){
+                return _rightInkWell(childCategory.childCategoryList[index].mallSubName);
+              },
+            ),
+          );
+      }
     );
   }
-  Widget _rightInkWell(int index){
+  Widget _rightInkWell(String title){
     return InkWell(
       onTap: (){
        
@@ -135,7 +145,7 @@ class _RightCategoryNavigatorState extends State<RightCategoryNavigator> {
       },
       child: Container(
         padding: EdgeInsets.all(10.0),
-        child: Text(list[index],style:TextStyle(color:Colors.black87,fontSize:ScreenUtil.instance.setSp(25)),),
+        child: Text(title,style:TextStyle(color:Colors.black87,fontSize:ScreenUtil.instance.setSp(25)),),
       ),
     );
   }
