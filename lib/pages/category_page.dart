@@ -28,9 +28,9 @@ class _CategoryPageState extends State<CategoryPage> {
           children: <Widget>[
             LeftCategoryNavigator(),
             Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 RightCategoryNavigator(),
+                GoodsList(),
               ],
             ),
           ],
@@ -81,6 +81,7 @@ class _LeftCategoryNavigatorState extends State<LeftCategoryNavigator> {
       setState(() {
         list = model.data;
       });
+       Provide.value<ChildCategory>(context).setChildCategory(list[0].bxMallSubDto);
     });
   }
   Widget _leftInkWell(int index) {
@@ -98,7 +99,7 @@ class _LeftCategoryNavigatorState extends State<LeftCategoryNavigator> {
         alignment: Alignment.center,
         height: ScreenUtil.instance.setHeight(100),
         decoration: BoxDecoration(
-          color: isChecked?Colors.grey.shade100:Colors.white,
+          color: isChecked?Color.fromRGBO(236, 236, 236, 1.0):Colors.white,
           border: Border(
             bottom:BorderSide(width: 1,color: Colors.black12),
           ),
@@ -114,7 +115,6 @@ class RightCategoryNavigator extends StatefulWidget {
 }
 
 class _RightCategoryNavigatorState extends State<RightCategoryNavigator> {
-  List list = ['全部','名酒','宝丰','北京二锅头','大明'];
   @override
   Widget build(BuildContext context) {
     return Provide<ChildCategory>(
@@ -148,5 +148,37 @@ class _RightCategoryNavigatorState extends State<RightCategoryNavigator> {
         child: Text(title,style:TextStyle(color:Colors.black87,fontSize:ScreenUtil.instance.setSp(25)),),
       ),
     );
+  }
+}
+//商品列表
+class GoodsList extends StatefulWidget {
+  @override
+  _GoodsListState createState() => _GoodsListState();
+}
+
+class _GoodsListState extends State<GoodsList> {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: _getGoodsList(),
+      builder: (context,snapshot){
+        print(snapshot.data);
+        return Container(
+          width: ScreenUtil.instance.setWidth(570),
+          child: Text('无数据',softWrap: true,),
+        );
+      },
+    );
+    return Container(
+      
+    );
+  }
+  Future _getGoodsList() async{
+    var data = {
+      'categoryId':'4',
+      'CategorySubId':'',
+      'page':1
+    };
+    return request('getMallGoods',formData: data);
   }
 }
