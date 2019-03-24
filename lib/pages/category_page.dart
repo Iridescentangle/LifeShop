@@ -8,6 +8,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../provide/child_category.dart';
 import 'package:provide/provide.dart';
 import '../provide/child_category.dart';
+import '../model/category_goods_list.dart';
+import '../provide/category_list_style.dart';
 class CategoryPage extends StatefulWidget {
   _CategoryPageState createState() => _CategoryPageState();
 }
@@ -16,13 +18,25 @@ class _CategoryPageState extends State<CategoryPage> {
   String text = '';
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('商品分类'),),
+      appBar: AppBar(title: Text('商品分类'),centerTitle: true,actions: <Widget>[
+        Provide<CategoryListStyleProvider>(
+          builder: (context,child,provider){
+            return IconButton(
+              onPressed: (){
+                Provide.value<CategoryListStyleProvider>(context).changeStyle();
+              },
+              icon: Icon(provider.style ==CategoryListStyle.List?Icons.grid_on:Icons.list),
+            );
+          },
+        ),
+        
+        
+      ],),
       body: Container(
         child: Row(
           children: <Widget>[
@@ -141,7 +155,6 @@ class _RightCategoryNavigatorState extends State<RightCategoryNavigator> {
     return InkWell(
       onTap: (){
        
-        
       },
       child: Container(
         padding: EdgeInsets.all(10.0),
@@ -157,20 +170,125 @@ class GoodsList extends StatefulWidget {
 }
 
 class _GoodsListState extends State<GoodsList> {
+  List<CategoryGoodsModel> list = [];
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _getGoodsList(),
+      future: request('getMallGoods',formData:{'categoryId':'4','CategorySubId':'','page':1}),
       builder: (context,snapshot){
-        print(snapshot.data);
-        return Container(
-          width: ScreenUtil.instance.setWidth(570),
-          child: Text('无数据',softWrap: true,),
-        );
+        if(snapshot.hasData){
+          CategoryGoodsOuterModel outModel = CategoryGoodsOuterModel.fromJson(json.decode(snapshot.data));
+          list =outModel.data; 
+          return Container(
+            width: ScreenUtil.instance.setWidth(570),
+            height: ScreenUtil.instance.setHeight(1000),
+            child: Provide<CategoryListStyleProvider>(
+              builder: (context,child,provider){
+                return Container(
+                  child:provider.style==CategoryListStyle.List?
+                  ListView.builder(
+                    itemCount: list.length,
+                    itemBuilder: _buildListItem,
+                  )
+                  :
+                  SingleChildScrollView(
+                    child:Wrap(
+                      // spacing: 2,
+                      children: list.map((item){
+                          return _buildGridItem(item);
+                        }
+                      ).toList(),
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        }else{
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
       },
     );
+  }
+  Widget _buildGridItem(CategoryGoodsModel item){
     return Container(
-      
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(width: 1.0,color: Colors.black12)
+        ),
+      width: ScreenUtil.instance.setWidth(275),
+      height: ScreenUtil.instance.setHeight(375),
+      child: InkWell(
+        onTap: (){
+
+        },
+        child: Column(
+          children: <Widget>[
+            _gridGoodsImage(item.image),
+            _girdGoodsName(item.goodsName),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                _gridGoodsPrePrice(item.presentPrice),
+                _gridGoodsOriPrice(item.oriPrice),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  Widget _gridGoodsPrePrice( prePrice){
+    return Text(
+      '￥${prePrice}    ',
+      style: TextStyle(
+        color: Colors.black,
+
+      ),
+    );
+  }
+  Widget _gridGoodsOriPrice( oriPrice){
+    return Text(
+      '￥${oriPrice}',
+      style: TextStyle(
+        color: Colors.black26,
+        decoration: TextDecoration.lineThrough,
+      ),
+    );
+  }
+  Widget _buildListItem(context,index){
+    return InkWell(
+      onTap: (){
+
+      },
+      child:Container(
+        padding: EdgeInsets.only(top: 5.0,bottom: 5.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(
+            bottom: BorderSide(width: 1.0,color: Colors.black12)
+          )
+        ),
+        child: Row(
+          children: <Widget>[
+            _listGoodImage(list[index].image),
+            Column(
+              children: <Widget>[
+                _girdGoodsName(list[index].goodsName),
+                _goodsPrice(index),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  Widget _listGoodImage(String url){
+    return Container(
+      width: ScreenUtil.instance.setWidth(200),
+      child: Image.network(url),
     );
   }
   Future _getGoodsList() async{
@@ -180,5 +298,50 @@ class _GoodsListState extends State<GoodsList> {
       'page':1
     };
     return request('getMallGoods',formData: data);
+  }
+  Widget _gridGoodsImage(String url){
+    return Container(
+      width: ScreenUtil.instance.setWidth(275),
+      child: Image.network(url),
+    );
+  }
+  Widget _goodsPrice(index){
+    return  Container( 
+      margin: EdgeInsets.only(top:20.0),
+      width: ScreenUtil().setWidth(370),
+      child:Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+            Text(
+              '价格:￥${list[index].presentPrice}',
+              style: TextStyle(color:Colors.black,),
+              ),
+            Text(
+              '￥${list[index].oriPrice}',
+              style: TextStyle(
+                color: Colors.black26,
+                decoration: TextDecoration.lineThrough,
+              ),
+            )
+        ]
+      )
+    );
+  }
+  Widget _girdGoodsName(String name){
+    return Container(
+      alignment: Alignment.center,
+      padding: EdgeInsets.all(5.0),
+      width: ScreenUtil.instance.setWidth(275),
+      child: Text(
+        name,
+        maxLines: 2,
+        textAlign: TextAlign.center,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          fontSize: ScreenUtil.instance.setSp(22),
+          color: Colors.lightBlue,
+          ),
+        ),
+    );
   }
 }

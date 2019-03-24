@@ -3,13 +3,16 @@ import 'pages/main_page.dart';
 import 'package:provide/provide.dart';
 import 'provide/counter.dart';
 import 'provide/child_category.dart';
+import 'provide/category_list_style.dart';
 void main(){
   Counter counter =Counter();
   ChildCategory childCategory =ChildCategory();
+  CategoryListStyleProvider csp =CategoryListStyleProvider();
   var providers =Providers();
   providers
   ..provide(Provider<Counter>.value(counter))
   ..provide(Provider<ChildCategory>.value(childCategory))
+  ..provide(Provider<CategoryListStyleProvider>.value(csp))
   ;
   runApp(
     ProviderNode(
