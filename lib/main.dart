@@ -4,15 +4,18 @@ import 'package:provide/provide.dart';
 import 'provide/counter.dart';
 import 'provide/child_category.dart';
 import 'provide/category_list_style.dart';
+import 'provide/category_goods_list.dart';
 void main(){
   Counter counter =Counter();
   ChildCategory childCategory =ChildCategory();
   CategoryListStyleProvider csp =CategoryListStyleProvider();
+  CategoryGoodsListProvider cglp =CategoryGoodsListProvider();
   var providers =Providers();
   providers
   ..provide(Provider<Counter>.value(counter))
   ..provide(Provider<ChildCategory>.value(childCategory))
   ..provide(Provider<CategoryListStyleProvider>.value(csp))
+  ..provide(Provider<CategoryGoodsListProvider>.value(cglp))
   ;
   runApp(
     ProviderNode(
