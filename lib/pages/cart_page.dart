@@ -22,7 +22,6 @@ class CartPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Number(),
-           
             IButton(),
           ],
         ),

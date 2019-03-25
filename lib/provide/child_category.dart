@@ -21,6 +21,5 @@ class ChildCategory with ChangeNotifier{
     childIndex =newIndex;
     notifyListeners();
   }
-  
 
 }
