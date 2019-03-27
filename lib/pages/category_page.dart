@@ -177,8 +177,11 @@ class _RightCategoryNavigatorState extends State<RightCategoryNavigator> {
     };
     request('getMallGoods',formData: data).then((result){
        CategoryGoodsOuterModel outModel = CategoryGoodsOuterModel.fromJson(json.decode(result));
-       print(json.encode(outModel.data));
+       if(outModel.data != null){
         Provide.value<CategoryGoodsListProvider>(context).setGoodsList(outModel.data);
+       }else{
+         Provide.value<CategoryGoodsListProvider>(context).setGoodsList([]);
+       }
     });
   }
   Widget _rightInkWell(int index,BxMallSubDto item){
@@ -186,7 +189,7 @@ class _RightCategoryNavigatorState extends State<RightCategoryNavigator> {
     isClick = index == Provide.value<ChildCategory>(context).childIndex ;
     return InkWell(
       onTap: (){
-       Provide.value<ChildCategory>(context).changeChildIndex(index);
+       Provide.value<ChildCategory>(context).changeChildIndex(index,item.mallSubId);
        _getGoodsList(item.mallSubId);
       },
       child: Container(
@@ -207,6 +210,11 @@ class _GoodsListState extends State<GoodsList> {
   Widget build(BuildContext context) {
     return Provide<CategoryGoodsListProvider>(
       builder: (context,child,vider){
+        if(vider.list.length == 0){
+          return Center(
+            child: Text('暂时没有该类商品哦!'),
+          );
+        }
           return Container(
             width: ScreenUtil.instance.setWidth(570),
             height: ScreenUtil.instance.setHeight(1000),
