@@ -11,6 +11,7 @@ import '../provide/child_category.dart';
 import '../model/category_goods_list.dart';
 import '../provide/category_list_style.dart';
 import '../provide/category_goods_list.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 class CategoryPage extends StatefulWidget {
   _CategoryPageState createState() => _CategoryPageState();
 }
