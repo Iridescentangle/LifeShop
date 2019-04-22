@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluro/fluro.dart';
 class DetailsPage extends StatelessWidget {
   final String goodsId;
   DetailsPage(this.goodsId);
