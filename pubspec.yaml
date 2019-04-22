@@ -22,9 +22,12 @@ dependencies:
   dio: ^2.0.9
   flutter_swiper : ^1.1.4
   flutter_screenutil: ^0.5.1
-  url_launcher : ^5.0.1
+  url_launcher : ^5.0.2
   flutter_easyrefresh: ^1.2.7
   provide : ^1.0.2
+  fluttertoast: ^3.0.1
+  fluro: ^1.4.0
+
 
 dev_dependencies:
   flutter_test:

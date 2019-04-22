@@ -12,6 +12,7 @@ import '../model/category_goods_list.dart';
 import '../provide/category_list_style.dart';
 import '../provide/category_goods_list.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 class CategoryPage extends StatefulWidget {
   _CategoryPageState createState() => _CategoryPageState();
 }
@@ -191,6 +192,10 @@ class _RightCategoryNavigatorState extends State<RightCategoryNavigator> {
     return InkWell(
       onTap: (){
        Provide.value<ChildCategory>(context).changeChildIndex(index,item.mallSubId);
+       if(index == 0){
+         _getGoodsList('');
+         return;
+       }
        _getGoodsList(item.mallSubId);
       },
       child: Container(
@@ -207,9 +212,12 @@ class GoodsList extends StatefulWidget {
 }
 
 class _GoodsListState extends State<GoodsList> {
+  GlobalKey<RefreshFooterState> key = GlobalKey<RefreshFooterState>();
+  ScrollController controller = ScrollController();
   @override
   Widget build(BuildContext context) {
     return Provide<CategoryGoodsListProvider>(
+
       builder: (context,child,vider){
         if(vider.list.length == 0){
           return Center(
@@ -221,11 +229,32 @@ class _GoodsListState extends State<GoodsList> {
             height: ScreenUtil.instance.setHeight(1000),
             child: Provide<CategoryListStyleProvider>(
               builder: (context,child,provider){
+                 try {
+                    if(Provide.value<ChildCategory>(context).page == 1){
+                      controller.jumpTo(0.0);
+                    }
+                  } catch (e) {
+                    print('第一次初始化'+e.toString());
+                  }
                 return Container(
                     child:provider.style==CategoryListStyle.List?
-                    Container(
-                        width: ScreenUtil.instance.setWidth(570),
+                    EasyRefresh(
+                        refreshFooter: ClassicsFooter(
+                          key: key,
+                          bgColor: Colors.white,
+                          textColor: Colors.lightBlue,
+                          moreInfoColor: Colors.lightBlue,
+                          showMore: true,
+                          noMoreText:Provide.value<ChildCategory>(context).noMoreText,
+                          moreInfo: '加载中...',
+                          loadedText: '上拉加载',
+                          loadReadyText:'上拉加载....',
+                        ),
+                        loadMore: (){
+                          _getMoreList();
+                        },
                         child:ListView.builder(
+                          controller: controller,
                           itemCount: vider.list.length,
                           itemBuilder: (context,index){
                             return _buildListItem(vider.list[index]);
@@ -233,14 +262,31 @@ class _GoodsListState extends State<GoodsList> {
                         ),
                       )
                     :
-                    SingleChildScrollView(
-                      child:Wrap(
-                        // spacing: 2,
-                        children: vider.list.map((item){
-                            return _buildGridItem(item);
-                          }
-                        ).toList(),
-                      ),
+                    EasyRefresh(
+                        refreshFooter: ClassicsFooter(
+                          key: key,
+                          bgColor: Colors.white,
+                          textColor: Colors.lightBlue,
+                          moreInfoColor: Colors.lightBlue,
+                          showMore: true,
+                          noMoreText: Provide.value<ChildCategory>(context).noMoreText,
+                          moreInfo: '加载中...',
+                          loadedText: '上拉加载',
+                          loadReadyText:'上拉加载....',
+                        ),
+                        child:SingleChildScrollView(
+                          controller: controller,
+                          child:Wrap(
+                            // spacing: 2,
+                            children: vider.list.map((item){
+                                return _buildGridItem(item);
+                              }
+                            ).toList(),
+                          ),
+                        ),
+                        loadMore: (){
+                          _getMoreList();
+                        },
                     ),
                 );
               },
@@ -328,13 +374,30 @@ class _GoodsListState extends State<GoodsList> {
       child: Image.network(url),
     );
   }
-  Future _getGoodsList() async{
+  void _getMoreList({String categoryId}) async{
+    Provide.value<ChildCategory>(context).addPage();
     var data = {
-      'categoryId':'4',
-      'CategorySubId':'',
-      'page':1
+      'categoryId':Provide.value<ChildCategory>(context).categoryId,
+      'categorySubId':Provide.value<ChildCategory>(context).categorySubId,
+      'page':Provide.value<ChildCategory>(context).page,
     };
-    return request('getMallGoods',formData: data);
+    request('getMallGoods',formData: data).then((result){
+       CategoryGoodsOuterModel outModel = CategoryGoodsOuterModel.fromJson(json.decode(result));
+       if(outModel.data != null && outModel.data.length > 0){
+        Provide.value<CategoryGoodsListProvider>(context).setMoreGoodsList(outModel.data);         
+       }else{
+        Provide.value<ChildCategory>(context).changeNoMoreText('暂无更多数据');
+        Fluttertoast.showToast(
+          msg: "没有更多数据啦",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.grey,
+          textColor: Colors.white,
+          fontSize: 16.0
+        );
+       }
+    });
   }
   Widget _gridGoodsImage(String url){
     return Container(

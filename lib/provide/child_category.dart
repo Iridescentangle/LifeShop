@@ -12,7 +12,7 @@ class ChildCategory with ChangeNotifier{
   setChildCategory(List<BxMallSubDto> list,String id){
     BxMallSubDto allCategory =BxMallSubDto();
     categoryId = id;
-    allCategory.mallSubId = '00';
+    allCategory.mallSubId = '';
     allCategory.mallCategoryId = '00';
     allCategory.comments = 'null';
     //点击大类和小类的时候 页码都要重置
@@ -24,9 +24,18 @@ class ChildCategory with ChangeNotifier{
     notifyListeners();
   }
   changeChildIndex(int newIndex,String subId){
+    page = 1;
+    noMoreText = '';
     childIndex =newIndex;
     categorySubId = subId;
     notifyListeners();
   }
-
+  addPage(){
+    page ++;
+    notifyListeners();
+  }
+  changeNoMoreText(String text){
+    noMoreText = text;
+    notifyListeners();
+  }
 }
