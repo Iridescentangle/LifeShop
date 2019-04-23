@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import '../routers/application.dart';
 class HomePage extends StatefulWidget {
   final Widget child;
 
@@ -110,7 +111,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
         (item){
           return InkWell(
             onTap: (){
-
+              Application.router.navigateTo(context, '/detail?goodsId=${item['goodsId']}');
             },
             child: Container(
               width: ScreenUtil.instance.setWidth(370),
