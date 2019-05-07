@@ -8,7 +8,6 @@ class GoodsDetailProvider with ChangeNotifier{
   void getGoodsDetail(String goodsId){
     var formData = {'goodId':goodsId};
     request('getGoodDetailById',formData: formData).then((result){
-      print(result);
       model = GoodsOutModel.fromJson(json.decode(result));
       notifyListeners();
     });
