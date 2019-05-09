@@ -226,7 +226,7 @@ class _GoodsListState extends State<GoodsList> {
         }
           return Container(
             width: ScreenUtil.instance.setWidth(570),
-            height: ScreenUtil.instance.setHeight(1000),
+            height: ScreenUtil.instance.setHeight(950),
             child: Provide<CategoryListStyleProvider>(
               builder: (context,child,provider){
                  try {
