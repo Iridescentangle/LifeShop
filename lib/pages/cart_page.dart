@@ -1,59 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provide/provide.dart';
-import '../provide/counter.dart';
-// class CartPage extends StatefulWidget {
-//   _CartPageState createState() => _CartPageState();
-// }
-
-// class _CartPageState extends State<CartPage> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold();
-//   }
-// }
+import '../provide/cart_provide.dart';
 class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // return Provide<Counter>();
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Number(),
-            IButton(),
-          ],
-        ),
-      ),
-    );
-  }
-}
-class Number extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        child: Provide<Counter>(
-          builder:(context,child,counter){
-              return Text(
-              '${counter.count}',
-              style: Theme.of(context).textTheme.display1,
+      appBar: AppBar(title: Text('购物车'),centerTitle: true,),
+      body: FutureBuilder(
+        future: _getCartGoods(context),
+        builder: (context,snapshot){
+          List cartList = Provide.value<CartProvider>(context).data;
+          if(snapshot.hasData){
+            return ListView.builder(
+                  itemCount: cartList.length,
+                  itemBuilder: (context,index){
+                    return ListTile(
+                      title: Text(cartList[index].goodsName),
+                    );
+                  },
             );
-          },
+          }else{
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
     );
   }
-}
-class IButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return RaisedButton(
-          onPressed: (){
-            Provide.value<Counter>(context).increment();
-          },
-          child: Text('+1'),
-        );
-
-    
+  Future _getCartGoods(context) async{
+    await Provide.value<CartProvider>(context).getCartGoods();
+    print('=============${Provide.value<CartProvider>(context).data.length}');
+    return 'Finished';
   }
 }

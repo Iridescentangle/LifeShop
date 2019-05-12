@@ -6,7 +6,7 @@ import 'dart:convert';
 class GoodsDetailProvider with ChangeNotifier{
   GoodsOutModel model;
   bool leftSelected = true;
-  void getGoodsDetail(String goodsId){
+  void getGoodsDetail(String goodsId) async{
     var formData = {'goodId':goodsId};
     request('getGoodDetailById',formData: formData).then((result){
       model = GoodsOutModel.fromJson(json.decode(result));
