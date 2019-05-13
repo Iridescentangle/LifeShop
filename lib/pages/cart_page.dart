@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provide/provide.dart';
 import '../provide/cart_provide.dart';
+import 'cart_page/cart_item.dart';
 class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -16,9 +17,7 @@ class CartPage extends StatelessWidget {
             return ListView.builder(
                   itemCount: cartList.length,
                   itemBuilder: (context,index){
-                    return ListTile(
-                      title: Text(cartList[index].goodsName),
-                    );
+                    return CartItemView(cartList[index]);
                   },
             );
           }else{
@@ -32,7 +31,6 @@ class CartPage extends StatelessWidget {
   }
   Future _getCartGoods(context) async{
     await Provide.value<CartProvider>(context).getCartGoods();
-    print('=============${Provide.value<CartProvider>(context).data.length}');
     return 'Finished';
   }
 }

@@ -74,7 +74,7 @@ class DetailTopArea extends StatelessWidget {
           Text(
             '￥${presentPrice}',
             style: TextStyle(
-              fontSize: ScreenUtil.instance.setSp(40.0),
+              fontSize: ScreenUtil.instance.setSp(40),
               color: Colors.blueAccent,
             ),
             ),
