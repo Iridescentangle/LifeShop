@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provide/provide.dart';
 import '../provide/cart_provide.dart';
 import 'cart_page/cart_item.dart';
+import 'cart_page/cart_bottom_bar.dart';
 class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -14,11 +15,19 @@ class CartPage extends StatelessWidget {
         builder: (context,snapshot){
           List cartList = Provide.value<CartProvider>(context).data;
           if(snapshot.hasData){
-            return ListView.builder(
-                  itemCount: cartList.length,
-                  itemBuilder: (context,index){
-                    return CartItemView(cartList[index]);
-                  },
+            return Stack(
+              children:<Widget>[
+                ListView.builder(
+                      itemCount: cartList.length,
+                      itemBuilder: (context,index){
+                        return CartItemView(cartList[index]);
+                      },
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    child: CartBottomBar(),
+                  ),
+              ],
             );
           }else{
             return Center(

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provide/provide.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,7 +9,6 @@ class CartItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: ScreenUtil.instance.setHeight(100),
       margin: EdgeInsets.fromLTRB(5.0, 2.0, 5.0, 2.0),
       padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
       decoration: BoxDecoration(
@@ -19,7 +19,10 @@ class CartItemView extends StatelessWidget {
       ),
       child: Row(
         children: <Widget>[
-
+          _checkBox(),
+          _goodsImage(),
+          _goodsName(),
+          _goodsPrice(),
         ],
       ),
     );
@@ -40,8 +43,9 @@ class CartItemView extends StatelessWidget {
   Widget _goodsImage(){
     return Container(
       width: ScreenUtil.instance.setWidth(150),
+      padding: EdgeInsets.all(10.0),
       decoration: BoxDecoration(
-        border: Border.all(width: 1.0,color: Colors.grey),
+        border: Border.all(width: 0.5,color: Colors.grey),
       ),
       child: Image.network(this.cartInfoItem.images),
     );
@@ -49,13 +53,15 @@ class CartItemView extends StatelessWidget {
   //商品名称
   Widget _goodsName(){
     return Container(
+      margin:EdgeInsets.only(left: 10),
+      alignment: Alignment.topLeft,
       width: ScreenUtil.instance.setWidth(300),
       child: Column(
         children: <Widget>[
             Text(
               this.cartInfoItem.goodsName,
               style: TextStyle(
-                color: Colors.black26,
+                color: Colors.black,
                 fontSize: ScreenUtil.instance.setSp(25),
               ),
             ),
@@ -66,6 +72,7 @@ class CartItemView extends StatelessWidget {
   //商品价格
   Widget _goodsPrice(){
     return Container(
+      width: ScreenUtil.instance.setWidth(150),
       child: Column(
         children: <Widget>[
           Text(
@@ -73,7 +80,7 @@ class CartItemView extends StatelessWidget {
             style:TextStyle(color: Colors.black)
             ),
           IconButton(
-            icon: Icon(Icons.delete),
+            icon: Icon(CupertinoIcons.delete,size: ScreenUtil.instance.setWidth(50),),
             onPressed: (){
               //TODO 删除商品按钮
             },
