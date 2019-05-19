@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provide/provide.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../model/cart_info.dart';
+import '../cart_page/cart_goods_count_manager.dart';
+import '../../provide/cart_provide.dart';
 class CartItemView extends StatelessWidget {
   final CartInfo cartInfoItem;
   CartItemView(this.cartInfoItem);
@@ -21,8 +23,8 @@ class CartItemView extends StatelessWidget {
         children: <Widget>[
           _checkBox(),
           _goodsImage(),
-          _goodsName(),
-          _goodsPrice(),
+          _goodsNameAndCount(),
+          _goodsPrice(context),
         ],
       ),
     );
@@ -32,7 +34,7 @@ class CartItemView extends StatelessWidget {
     return Container(
       child: Checkbox(
         activeColor: Colors.blueAccent,
-        value: true,
+        value: this.cartInfoItem.isCheck,
         onChanged: (checked){
           //TODO 更改选中状态
         },
@@ -51,12 +53,13 @@ class CartItemView extends StatelessWidget {
     );
   }
   //商品名称
-  Widget _goodsName(){
+  Widget _goodsNameAndCount(){
     return Container(
       margin:EdgeInsets.only(left: 10),
       alignment: Alignment.topLeft,
       width: ScreenUtil.instance.setWidth(300),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
             Text(
               this.cartInfoItem.goodsName,
@@ -65,12 +68,13 @@ class CartItemView extends StatelessWidget {
                 fontSize: ScreenUtil.instance.setSp(25),
               ),
             ),
+            CartGoodsCountManager(this.cartInfoItem),
           ],
         ),
     );
   }
   //商品价格
-  Widget _goodsPrice(){
+  Widget _goodsPrice(BuildContext context){
     return Container(
       width: ScreenUtil.instance.setWidth(150),
       child: Column(
@@ -83,6 +87,7 @@ class CartItemView extends StatelessWidget {
             icon: Icon(CupertinoIcons.delete,size: ScreenUtil.instance.setWidth(50),),
             onPressed: (){
               //TODO 删除商品按钮
+              Provide.value<CartProvider>(context).deleteGoods(cartInfoItem.goodsId);
             },
           ),
         ],

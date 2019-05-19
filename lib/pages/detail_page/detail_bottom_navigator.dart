@@ -29,7 +29,7 @@ class DetailBottomNavigator extends StatelessWidget {
               InkWell(
                 onTap: () async{
                   var goodsInfo = provider.model.data.goodInfo;
-                  Provide.value<CartProvider>(context).save(goodsInfo.goodsId, goodsInfo.goodsName, 1, goodsInfo.presentPrice, goodsInfo.image1);
+                  Provide.value<CartProvider>(context).save(goodsInfo.goodsId, goodsInfo.goodsName, 1, goodsInfo.presentPrice, goodsInfo.image1,true);
                 },//TODO
                 child: Container(
                   color: Colors.orange,
