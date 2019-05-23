@@ -21,7 +21,7 @@ class CartItemView extends StatelessWidget {
       ),
       child: Row(
         children: <Widget>[
-          _checkBox(),
+          _checkBox(context),
           _goodsImage(),
           _goodsNameAndCount(),
           _goodsPrice(context),
@@ -30,13 +30,14 @@ class CartItemView extends StatelessWidget {
     );
   }
   //多选的选择按钮
-  Widget _checkBox(){
+  Widget _checkBox(BuildContext context){
     return Container(
       child: Checkbox(
         activeColor: Colors.blueAccent,
         value: this.cartInfoItem.isCheck,
-        onChanged: (checked){
-          //TODO 更改选中状态
+        onChanged: (bool checked){
+          this.cartInfoItem.isCheck = checked;
+          Provide.value<CartProvider>(context).changeSelectState(cartInfoItem);
         },
       ),
     );

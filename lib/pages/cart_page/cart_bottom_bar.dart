@@ -28,12 +28,16 @@ class CartBottomBar extends StatelessWidget {
       child:Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children:<Widget>[
-          Checkbox(
-            value: true,
-            activeColor: Colors.blueAccent,
-            onChanged: (value){
-              //TODO 全选中或取消全选
-            },
+          Provide<CartProvider>(
+            builder:(context,child,provider){
+              return Checkbox(
+                value: provider.isAllSelected,
+                activeColor: Colors.blueAccent,
+                onChanged: (value){
+                  Provide.value<CartProvider>(context).changeAllSelect(value);
+                },
+              );
+            }
           ),
           Text('全选'),
         ],

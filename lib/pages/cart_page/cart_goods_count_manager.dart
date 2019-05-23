@@ -26,9 +26,11 @@ class CartGoodsCountManager extends StatelessWidget {
       onTap: (){
         if(addOrMinus){
           //增加
-          Provide.value<CartProvider>(context).save(cartInfo.goodsId, cartInfo.goodsName, cartInfo.count, cartInfo.price, cartInfo.images, cartInfo.isCheck);
+          Provide.value<CartProvider>(context).addOrMinusGoodsCount(cartInfo,addOrMinus);
         }else{
-          Provide.value<CartProvider>(context).deleteGoods(cartInfo.goodsId);
+          if(enable){
+            Provide.value<CartProvider>(context).addOrMinusGoodsCount(cartInfo,addOrMinus);
+          }
         }
       },
       child:enable?
