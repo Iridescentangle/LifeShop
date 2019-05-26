@@ -5,13 +5,10 @@ import 'category_page.dart';
 import 'cart_page.dart';
 import 'member_page.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-class MainPage extends StatefulWidget {
-  _MainPageState createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
-  int currentIndex = 0;
-  final List<Widget> pages = [
+import '../provide/main_bottom_provider.dart';
+import 'package:provide/provide.dart';
+class MainPage extends StatelessWidget {
+    final List<Widget> pages = [
     HomePage(),
     CategoryPage(),
     CartPage(),
@@ -36,27 +33,25 @@ class _MainPageState extends State<MainPage> {
     ),
   ];
   @override
-  void initState() {
-    super.initState();
-  }
-  @override
   Widget build(BuildContext context) {
-    ScreenUtil.instance = ScreenUtil(width: 750,height: 1334)..init(context);
-    return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        items: bottomTabs,
-        type: BottomNavigationBarType.fixed,
-        currentIndex: currentIndex,
-        onTap: (int index){
-          setState(() {
-           currentIndex =index; 
-          });
-        }
-      ),
-      body: IndexedStack(
-        index: currentIndex,
-        children: pages,
-      ),
-    );
+      ScreenUtil.instance = ScreenUtil(width: 750,height: 1334)..init(context);
+      return Provide<MainBottomProvider>(
+        builder:(context,child,provider){
+          return Scaffold(
+            bottomNavigationBar: BottomNavigationBar(
+              items: bottomTabs,
+              type: BottomNavigationBarType.fixed,
+              currentIndex: provider.currentIndex,
+              onTap: (int newIndex){
+                provider.changeCurrentIndex(newIndex); 
+              }
+            ),
+            body: IndexedStack(
+              index: provider.currentIndex,
+              children: pages,
+            ),
+          );
+        },
+      );
   }
 }

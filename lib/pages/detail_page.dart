@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provide/provide.dart';
 import '../provide/detail_info_provide.dart';
 import 'detail_page/detail_page_top_area.dart';
@@ -25,14 +26,21 @@ class DetailsPage extends StatelessWidget {
         future: getGoodsDetailInfo(context),
         builder: (context,snapshot){
           if(snapshot.hasData){
-            return Stack(children: <Widget>[
-              ListView(
-                children: <Widget>[
-                    DetailTopArea(),
-                    DetailIntro(),
-                    DetailsTabbar(),
-                    DetailWebPart(),
-                  ],
+            return Stack(
+              children: <Widget>[
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  top: 0,
+                  bottom: ScreenUtil.instance.setHeight(80),
+                  child:ListView(
+                      children: <Widget>[
+                          DetailTopArea(),
+                          DetailIntro(),
+                          DetailsTabbar(),
+                          DetailWebPart(),
+                      ],
+                    ),
                 ),
                 Positioned(
                   bottom: 0.0,

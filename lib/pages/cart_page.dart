@@ -18,11 +18,17 @@ class CartPage extends StatelessWidget {
               children:<Widget>[
                 Provide<CartProvider>(
                   builder:(context,child,provider){
-                  return ListView.builder(
-                        itemCount: provider.data.length,
-                        itemBuilder: (context,index){
-                          return CartItemView(provider.data[index]);
-                        },
+                  return Positioned(
+                    top: 0,
+                    bottom: 80,
+                    left: 0,
+                    right: 0,
+                    child:ListView.builder(
+                          itemCount: provider.data.length,
+                          itemBuilder: (context,index){
+                            return CartItemView(provider.data[index]);
+                          },
+                      ),
                     );
                   }
                 ),

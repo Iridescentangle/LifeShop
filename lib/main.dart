@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'pages/main_page.dart';
 import 'package:provide/provide.dart';
-import 'provide/counter.dart';
 import 'provide/child_category.dart';
 import 'provide/category_list_style.dart';
 import 'provide/category_goods_list.dart';
@@ -10,21 +9,22 @@ import './routers/routes.dart';
 import './routers/application.dart';
 import './provide/detail_info_provide.dart';
 import 'provide/cart_provide.dart';
+import 'provide/main_bottom_provider.dart';
 void main(){
-  Counter counter =Counter();
   ChildCategory childCategory =ChildCategory();
   CategoryListStyleProvider csp =CategoryListStyleProvider();
   CategoryGoodsListProvider cglp =CategoryGoodsListProvider();
   GoodsDetailProvider gdp = GoodsDetailProvider();
   CartProvider cp = CartProvider();
+  MainBottomProvider mbp = MainBottomProvider();
   var providers =Providers();
   providers
-  ..provide(Provider<Counter>.value(counter))
   ..provide(Provider<ChildCategory>.value(childCategory))
   ..provide(Provider<CategoryListStyleProvider>.value(csp))
   ..provide(Provider<CategoryGoodsListProvider>.value(cglp))
   ..provide(Provider<GoodsDetailProvider>.value(gdp))
   ..provide(Provider<CartProvider>.value(cp))
+  ..provide(Provider<MainBottomProvider>.value(mbp))
   ;
   runApp(
     ProviderNode(
