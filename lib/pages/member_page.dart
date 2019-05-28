@@ -138,9 +138,7 @@ class MemberPage extends StatelessWidget {
               child: ListTile(
                 onTap:(){
                   //TODO 根据index判断
-                  if(item['index'] == 0){
-                    Application.router.navigateTo(context,'jpush');
-                  }
+
                 },
                 leading: Icon(item['icon']),
                 title: Text(item['title']),
